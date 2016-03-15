@@ -1,10 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 project(CppNumericalSolvers)
 
-include(CppNumericalSolvers.config)
-
-set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
-set( CMAKE_TEST_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
+set(CMAKE_TEST_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 
 # check existence of c++11 compiler
 include(CheckCXXCompilerFlag)
@@ -36,4 +34,9 @@ add_subdirectory(src/test)
 
 
 add_custom_target(lint COMMAND ${CMAKE_COMMAND} -P ${PROJECT_SOURCE_DIR}/cmake/lint.cmake)
-add_custom_target(install COMMAND ${CMAKE_COMMAND} -P ${PROJECT_SOURCE_DIR}/cmake/install.cmake)
+
+SET(PKG_CONFIG_CFLAGS -I${CMAKE_INSTALL_PREFIX}/include)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.pc.in ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.pc)
+
+INSTALL(DIRECTORY include/cppoptlib DESTINATION include)
+INSTALL(FILES ${PROJECT_NAME}.pc DESTINATION lib/pkgconfig)
